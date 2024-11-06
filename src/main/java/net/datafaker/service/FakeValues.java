@@ -34,7 +34,7 @@ public class FakeValues implements FakeValuesInterface {
         return getMap(values.get(), key);
     }
 
-    private Map<String, Object> loadFromUrl() {
+    public Map<String, Object> loadFromUrl() {
         final URL url = fakeValuesContext.getUrl();
         if (url == null) {
             return null;
@@ -46,7 +46,7 @@ public class FakeValues implements FakeValuesInterface {
         }
     }
 
-    private Map<String, Object> loadValues() {
+    public Map<String, Object> loadValues() {
         Map<String, Object> result = loadFromUrl();
         if (result != null) return result;
 
@@ -131,7 +131,7 @@ public class FakeValues implements FakeValuesInterface {
             keysOf(values.get());
     }
 
-    private static Set<String> keysOf(Map<String, ?> map) {
+    public static Set<String> keysOf(Map<String, ?> map) {
         return map == null || map.isEmpty() ? null : map.keySet();
     }
 
