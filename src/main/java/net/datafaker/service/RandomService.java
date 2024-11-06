@@ -74,7 +74,7 @@ public class RandomService {
         };
     }
 
-    private static long plusOne(long value) {
+    public static long plusOne(long value) {
         return value == Long.MAX_VALUE ? value : value + 1;
     }
 
