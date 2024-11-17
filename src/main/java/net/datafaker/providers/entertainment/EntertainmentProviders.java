@@ -143,7 +143,7 @@ public interface EntertainmentProviders extends ProviderRegistration {
     default HowToTrainYourDragon howToTrainYourDragon() {
         return getProvider(HowToTrainYourDragon.class, HowToTrainYourDragon::new);
     }
-    
+
     default Joke joke() {
         return getProvider(Joke.class, Joke::new);
     }

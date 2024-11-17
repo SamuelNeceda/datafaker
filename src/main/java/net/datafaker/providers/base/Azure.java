@@ -140,7 +140,7 @@ public class Azure extends AbstractProvider<BaseProviders> {
     public String logAnalytics() {
         return "log-" + randHex();
     }
-    
+
     public String springApps() {
         return "sa-" + randHex();
     }

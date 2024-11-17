@@ -16,4 +16,3 @@ class HowToTrainYourDragonTest extends EntertainmentFakerTest {
         );
     }
 }
-

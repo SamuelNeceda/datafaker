@@ -4,7 +4,7 @@ import net.datafaker.providers.base.AbstractProvider;
 
 /**
  * Futurama is an American animated science fiction sitcom created by Matt Groening for the Fox Broadcasting Company.
- * 
+ *
  * @since 1.8.0
  */
 public class Futurama extends AbstractProvider<EntertainmentProviders> {

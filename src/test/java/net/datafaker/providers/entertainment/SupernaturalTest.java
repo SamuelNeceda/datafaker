@@ -16,4 +16,3 @@ class SupernaturalTest extends EntertainmentFakerTest {
         );
     }
 }
-
