@@ -31,10 +31,12 @@ jobs:
           java-version: ${{ matrix.java-version }}
           distribution: 'temurin'
           cache: maven
+      - name: Validate formatting with Spotless
+        run: ./mvnw $mvn_options spotless:check
       - name: Build with Maven
         run: ./mvnw $mvn_options install -PnoGpg --file pom.xml
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4.6.0
+        uses: codecov/codecov-action@v5.0.2
         if: ${{ matrix.java-version == env.jdk_for_downstream && matrix.runs-on == env.os_for_downstream}}
         with:
           token: ${{ secrets.CODECOV_TOKEN }}

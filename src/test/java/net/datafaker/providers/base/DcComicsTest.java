@@ -6,7 +6,7 @@ import java.util.Collection;
 public class DcComicsTest extends BaseFakerTest<BaseFaker> {
 
     @Override
-protected Collection<TestSpec> providerListTest() { 
+protected Collection<TestSpec> providerListTest() {
         DcComics dcComics = faker.dcComics();
         return List.of(TestSpec.of(dcComics::hero, "dc_comics.hero"),
                 TestSpec.of(dcComics::heroine, "dc_comics.heroine"),

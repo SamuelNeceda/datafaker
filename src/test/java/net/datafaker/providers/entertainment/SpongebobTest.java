@@ -16,4 +16,3 @@ class SpongebobTest extends EntertainmentFakerTest {
         );
     }
 }
-

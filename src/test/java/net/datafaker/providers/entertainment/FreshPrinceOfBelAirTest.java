@@ -16,4 +16,3 @@ class FreshPrinceOfBelAirTest extends EntertainmentFakerTest {
         );
     }
 }
-
