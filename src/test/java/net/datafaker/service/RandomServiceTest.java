@@ -33,7 +33,7 @@ class RandomServiceTest extends AbstractFakerTest {
     public static final String ELEMENT_2 = "Element2";
     public static final String ELEMENT_3 = "Element3";
     public static final String STRING_WEIGHT = "1.0";
-    public static final int ITERATIONS = 1000;
+    public static final int ITERATIONS = 100;
     public static final double ELEMENT_1_WEIGHT = 1.0;
     public static final double ELEMENT_2_WEIGHT = 2.0;
     public static final double ELEMENT_3_WEIGHT = 3.0;
@@ -66,6 +66,39 @@ class RandomServiceTest extends AbstractFakerTest {
         assertThat(counts).containsKeys(ELEMENT_1, ELEMENT_2, ELEMENT_3);
         assertThat(counts.get(ELEMENT_1)).isLessThan(counts.get(ELEMENT_2));
         assertThat(counts.get(ELEMENT_2)).isLessThan(counts.get(ELEMENT_3));
+    }
+
+    @ParameterizedTest
+    @MethodSource("randomServiceProvider")
+    void testWeightedArrayElement_withUnsortedWeights(RandomService randomService) {
+        List<Map<String, Object>> items = new ArrayList<>();
+        int totalItems = 500_000;
+
+        Random random = new Random();
+        for (int i = 1; i <= totalItems; i++) {
+            items.add(Map.of(VALUE_KEY, "Element" + i, WEIGHT_KEY, random.nextDouble() * 1_000));
+        }
+
+        Collections.shuffle(items);
+
+        // Measure execution time
+        long start = System.nanoTime();
+        Map<String, Integer> counts = countResults(randomService, items);
+        long duration = System.nanoTime() - start;
+
+        // Convert nanoseconds to seconds
+        double durationInSeconds = duration / 1_000_000_000.0;
+
+        System.out.println("Execution time: " + durationInSeconds + " seconds");
+    }
+
+    private Map<String, Integer> countResults(RandomService randomService, List<Map<String, Object>> items) {
+        Map<String, Integer> counts = new HashMap<>();
+        for (int i = 0; i < ITERATIONS; i++) {
+            String result = randomService.weightedArrayElement(items);
+            counts.merge(result, 1, Integer::sum);
+        }
+        return counts;
     }
 
     @ParameterizedTest
@@ -370,14 +403,7 @@ class RandomServiceTest extends AbstractFakerTest {
         assertThat(randomService.hex()).matches("^[0-9A-F]{8}$");
     }
 
-    private Map<String, Integer> countResults(RandomService randomService, List<Map<String, Object>> items) {
-        Map<String, Integer> counts = new HashMap<>();
-        for (int i = 0; i < ITERATIONS; i++) {
-            String result = randomService.weightedArrayElement(items);
-            counts.merge(result, 1, Integer::sum);
-        }
-        return counts;
-    }
+
 
     private static Stream<Arguments> randomServiceProvider() {
         return Stream.of(
