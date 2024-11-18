@@ -145,6 +145,46 @@ class RandomServiceTest extends AbstractFakerTest {
         assertThat(randomService.hex()).matches("^[0-9A-F]{8}$");
     }
 
+    @Test
+    void testEquals() {
+        RandomService service1 = new RandomService();
+        RandomService service2 = new RandomService();
+        RandomService service3 = new RandomService(new Random(42));
+
+        assertThat(service1)
+            .isEqualTo(service2)
+            .isNotEqualTo(service3)
+            .isEqualTo(service1)
+            .isNotEqualTo(null)
+            .isNotEqualTo("Some String");
+    }
+
+    @Test
+    void testHex_withZeroLength() {
+        RandomService randomService = new RandomService();
+
+        String result = randomService.hex(0);
+
+        assertThat(result).isEmpty();
+    }
+
+    @Test
+    void testMinGreaterThanMaxThrowsException() {
+        RandomService randomService = new RandomService();
+
+        assertThatThrownBy(() -> randomService.nextInt(10, 5))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("Min (10) > Max (5)");
+    }
+
+    @Test
+    void testPlusOne() {
+        assertThat(RandomService.plusOne(5)).isEqualTo(6);
+        assertThat(RandomService.plusOne(0)).isEqualTo(1);
+        assertThat(RandomService.plusOne(Long.MAX_VALUE)).isEqualTo(Long.MAX_VALUE);
+        assertThat(RandomService.plusOne(-3)).isEqualTo(-2);
+    }
+
     private static Stream<Arguments> randomServiceProvider() {
         return Stream.of(
             Arguments.of(new RandomService(), new RandomService(new Random()))

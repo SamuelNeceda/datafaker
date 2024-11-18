@@ -65,6 +65,28 @@ class FakeValuesServiceTest extends AbstractFakerTest {
     }
 
     @Test
+    void testAddUrlWithNullUrl() {
+        FakeValuesService fakeValuesService = new FakeValuesService();
+        Locale locale = Locale.ENGLISH;
+
+        assertThatThrownBy(() -> fakeValuesService.addUrl(locale, null))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("url should be an existing readable file");
+    }
+
+    @Test
+    void testSafeFetchWithEmptyList() {
+        String key = "key.emptyList";
+        String defaultIfNull = "defaultValue";
+
+        when(fakeValuesService.fetchObject(key, context)).thenReturn(List.of());
+
+        String result = fakeValuesService.safeFetch(key, context, defaultIfNull);
+
+        assertThat(result).isEqualTo(defaultIfNull);
+    }
+
+    @Test
     void fetchStringShouldReturnValue() {
         assertThat(fakeValuesService.fetchString("property.dummy", mockedFaker.getContext())).isEqualTo("x");
     }
@@ -72,6 +94,52 @@ class FakeValuesServiceTest extends AbstractFakerTest {
     @Test
     void fetchShouldReturnValue() {
         assertThat(fakeValuesService.fetch("property.dummy", mockedFaker.getContext())).isEqualTo("x");
+    }
+
+    @Test
+    void testFetchWithList() {
+        when(fakeValuesService.fetchObject("key.list", context)).thenReturn(List.of("value1", "value2"));
+
+        Object result = fakeValuesService.fetch("key.list", context);
+
+        assertThat(result).isEqualTo("value1");
+    }
+
+    @Test
+    void testFetchWithEmptyList() {
+        when(fakeValuesService.fetchObject("key.emptyList", context)).thenReturn(List.of());
+
+        Object result = fakeValuesService.fetch("key.emptyList", context);
+
+        assertThat(result).isNull();
+    }
+
+    @Test
+    void testFetchWithNull() {
+        when(fakeValuesService.fetchObject("key.null", context)).thenReturn(null);
+
+        Object result = fakeValuesService.fetch("key.null", context);
+
+        assertThat(result).isNull();
+    }
+
+    @Test
+    void testFetchWithSingleItemList() {
+        when(fakeValuesService.fetchObject("key.singleItem", context)).thenReturn(List.of("singleValue"));
+
+        Object result = fakeValuesService.fetch("key.singleItem", context);
+
+        assertThat(result).isEqualTo("singleValue");
+    }
+
+    @Test
+    void testExamplifyWithNull() {
+        FakeValuesService fakeValuesService = new FakeValuesService();
+        FakerContext context = new FakerContext(Locale.ENGLISH, new RandomService());
+
+        String result = fakeValuesService.examplify(null, context);
+
+        assertThat(result).isNull();
     }
 
     @Test
